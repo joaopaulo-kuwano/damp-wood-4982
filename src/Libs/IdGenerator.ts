@@ -1,15 +1,17 @@
+import { nanoid } from 'nanoid'
+
 export interface IIdGenerator {
   generateId: () => string
 }
 
 export class IdGenerator implements IIdGenerator {
   public generateId () {
-    return ''
+    return nanoid()
   }
 }
 
 export class MockIdGenerator implements IIdGenerator {
   public generateId () {
-    return Math.random().toString()
+    return 'MOCK__' + Math.random().toString()
   }
 }
