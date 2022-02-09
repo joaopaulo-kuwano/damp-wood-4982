@@ -20,6 +20,10 @@ export function ProductAddValidator (form: any): ValidatorResponse<IProductAddRe
     errors.push({ field, type, message: message || '' })
   }
 
+  if (!form) {
+    addError('ALL', 'object', 'invalid json form')
+    return { data: form, errors: errors }
+  }
   if (typeof form.oid !== 'number') addError('oid', 'number')
   if (typeof form.name !== 'string') addError('name', 'string')
   if (typeof form.description !== 'string') addError('description', 'string')
