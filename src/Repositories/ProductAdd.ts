@@ -15,14 +15,23 @@ export interface IProductAddRepoDTO {
 }
 
 export interface IProductAddRepo {
-  exec: (e: IProductAddRepoDTO) => Promise<void>
+  exec: (e: IProductAddRepoDTO) => Promise<{ data: IProductAddRepoDTO, error: any }>
   product: IProductAddRepoDTO
 }
 
-export class ProductAddRepo implements IProductAddRepo {
+export class ProductAddMockRepo implements IProductAddRepo {
   product!: IProductAddRepoDTO
 
+  // eslint-disable-next-line no-useless-constructor
+  constructor (readonly throwError?: boolean) { }
+
   async exec (form: IProductAddRepoDTO) {
-    this.product = form
+    try {
+      if (this.throwError) throw new Error('async operation error')
+      this.product = form
+      return { data: this.product, error: null }
+    } catch (err) {
+      return { error: err, data: this.product }
+    }
   }
 }
