@@ -32,6 +32,7 @@
     "node": "16.13.2"
   },
   "dependencies": {
-    "nanoid": "^3.2.0"
+    "nanoid": "^3.2.0",
+    "redis": "^4.0.3"
   }
 }

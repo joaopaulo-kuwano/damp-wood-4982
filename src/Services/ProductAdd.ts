@@ -1,5 +1,5 @@
 import { IIdGenerator } from '../Libs/IdGenerator'
-import { IProductAddRepo, IProductAddRepoDTO } from '../Repositories/ProductAdd'
+import { IProductAddRepo, IProductAddRepoDTO } from '../Repositories/Produc'
 import { IProductAddRequest } from '../Validators/ProductAddRequest'
 
 export class ProductAdd {
