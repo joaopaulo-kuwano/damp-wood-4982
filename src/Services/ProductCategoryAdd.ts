@@ -1,26 +1,30 @@
-import { IProductCategory } from '../Entities/ProductCategory'
+import { IProduct } from '../Entities/Product'
 import { IIdGenerator } from '../Libs/IdGenerator'
 import { IProductCategoryRepo } from '../Repositories/ProductCategory'
-import { IProductCategoryAddRequest } from '../Validators/ProductCategoryAddRequest'
+import { IProductAddRequest } from '../Validators/ProductAddRequest'
+import { ProductCategoryAddRequest } from '../Validators/ProductCategoryAddRequest'
 
-export class ProductCategoryAdd {
+export class ProductCategoryAddService {
+  form!: IProductAddRequest
+
   // eslint-disable-next-line no-useless-constructor
-  constructor(
-    readonly form: IProductCategoryAddRequest,
-    readonly idGenerator: IIdGenerator,
-    readonly repo: IProductCategoryRepo
+  constructor (
+    private validator: ProductCategoryAddRequest,
+    private idGenerator: IIdGenerator,
+    private repo: IProductCategoryRepo
   ) { }
 
-  async exec () {
+  public async exec () {
+    const valid = this.validator.validate()
+    if (!valid) return { data: this.validator.errors, statusCode: 400 }
     const nid = this.idGenerator.generateId()
     const createdAt = new Date()
     const updatedAt = new Date()
-    // eslint-disable-next-line no-unused-vars
-    const cat: IProductCategory = {
-      ...this.form, nid, createdAt, updatedAt, products: []
-    }
-
-    const { data, error } = await this.repo.add(cat)
-    return { data, error }
+    const products: IProduct[] = []
+    const { data, error } = await this.repo.add({
+      ...this.validator.data, nid, createdAt, updatedAt, products
+    })
+    if (error) return { data: error, statusCode: 500 }
+    return { data: data, statusCode: 201 }
   }
 }
