@@ -1,26 +1,51 @@
-import { FieldError, ValidatorResponse } from '.'
+import Ajv, { Schema } from 'ajv'
+import { ErrorObject } from '.'
+const ajv = new Ajv()
 
 export interface IProductCategoryAddRequest {
   oid: number
   name: string
+  description: string
   active: boolean
   companyNid: string
 }
 
-export function ProductCategoryAddValidator (form: any): ValidatorResponse<IProductCategoryAddRequest> {
-  const errors: FieldError[] = []
+export class ProductCategoryAddRequest {
+  schema: Schema;
+  errors: ErrorObject[] = []
+  data!: IProductCategoryAddRequest
 
-  function addError (field: string, type: string, message?: string): void {
-    errors.push({ field, type, message: message || '' })
+  constructor (private readonly form: any) {
+    this.schema = {
+      type: 'object',
+      properties: {
+        oid: { type: 'integer' },
+        name: { type: 'string' },
+        description: { type: 'string' },
+        active: { type: 'boolean' },
+        companyNid: { type: 'string' }
+      },
+      required: ['oid', 'name', 'active', 'companyNid', 'description'],
+      additionalProperties: false
+    }
   }
 
-  if (!form) {
-    addError('ALL', 'object', 'invalid json form')
-    return { data: form, errors: errors }
+  public validate (): boolean {
+    const validator = ajv.compile(this.schema)
+    const valid = validator(this.form)
+    if (valid) this.data = this.form
+    else this.errors = validator.errors as any
+    return valid
   }
-  if (typeof form.oid !== 'number') addError('oid', 'number')
-  if (typeof form.name !== 'string') addError('name', 'string')
-  if (typeof form.active !== 'boolean') addError('active', 'boolean')
-  if (typeof form.companyNid !== 'string') addError('companyNid', 'string')
-  return { data: form, errors: errors }
 }
+
+/**
+ *   nid: string
+  oid: number
+  name: string
+  active: boolean
+  createdAt: Date
+  updatedAt: Date
+  companyNid: string
+  products: IProduct[]
+ */
