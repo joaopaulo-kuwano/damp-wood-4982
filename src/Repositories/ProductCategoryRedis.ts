@@ -68,4 +68,13 @@ export class ProductCategoryRedisRepo implements IProductCategoryRepo {
       return { data: [MockProductCategory], error: err }
     }
   }
+
+  async findByCompany (e: string) {
+    try {
+      const list: IProductCategory[] = await this.client.json.get('productCategories')
+      return { data: list.filter(item => item.companyNid === e), error: null }
+    } catch (err) {
+      return { data: [MockProductCategory], error: err }
+    }
+  }
 }
