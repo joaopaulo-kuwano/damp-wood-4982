@@ -11,6 +11,7 @@ export class ApiLoader {
   public setupRoutes () {
     // this.app = express()
     this.app.use('/product-category', ProductCategoryRouter)
+    // this.app.use('/dynamo-product-category', DynamoProdCatRouter)
   }
 
   public initServer () {
