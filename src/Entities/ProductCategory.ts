@@ -1,12 +1,12 @@
 import { IProduct } from './Product'
 
 export interface IProductCategory {
-  nid: string
+  id: string
   oid: number
   name: string
   active: boolean
   createdAt: Date
   updatedAt: Date
-  companyNid: string
+  companyId: string
   products: IProduct[]
 }
