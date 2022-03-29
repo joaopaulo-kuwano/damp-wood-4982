@@ -17,7 +17,7 @@ export class DynamoDBSDK {
     this.db = new AWS.DynamoDB.DocumentClient({})
   }
 
-  async put (param: DynamoDBParam): Promise<{error: AWS.AWSError, data: AWS.DynamoDB.DocumentClient.PutItemOutput}> {
+  async put (param: DynamoDBParam): Promise<{ error: AWS.AWSError, data: AWS.DynamoDB.DocumentClient.PutItemOutput }> {
     return new Promise((resolve, reject) => {
       this.db.put(param, (e, d) => {
         resolve({ error: e, data: d })
@@ -25,9 +25,11 @@ export class DynamoDBSDK {
     })
   }
 
-  async read () {
+  async read (query: AWS.DynamoDB.DocumentClient.QueryInput): Promise<{ error: AWS.AWSError, data: AWS.DynamoDB.DocumentClient.QueryOutput }> {
     return new Promise((resolve, reject) => {
-      this.db.query({})
+      this.db.query(query, (e, d) => {
+        resolve({ error: e, data: d })
+      })
     })
   }
 }
