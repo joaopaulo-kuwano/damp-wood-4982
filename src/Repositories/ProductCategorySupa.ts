@@ -15,16 +15,17 @@ export class ProductCategorySupaRepo implements IProductCategoryRepo {
     let select = '*'
     // eslint-disable-next-line prefer-const
     let match = {}
-    if (!params.withProducts) {
-      select = 'id, oid, name, active, createdAt, updatedAt, companyId'
-    }
-    if (params.id) {
-      Object.assign(match, { id: params.id })
-    }
-    if (params.companyId) {
-      Object.assign(match, { companyId: params.companyId })
-    }
-    const api = await this.client.from('ProductCategory').select(select).match(match)
-    return { data: api.data as any, error: api.error as any }
+    if (!params.withProducts) select = 'id, oid, name, active, createdAt, updatedAt, companyId'
+    if (params.id) Object.assign(match, { id: params.id })
+    if (params.companyId) Object.assign(match, { companyId: params.companyId })
+    const api = await this.client.from<IProductCategory>('ProductCategory').select(select).match(match)
+    return { data: api.data, error: api.error }
+  }
+
+  async delete (id: string) {
+    const api = await this.client.from<IProductCategory>('ProductCategory')
+      .delete({ returning: 'representation' })
+      .match({ id })
+    return { data: api.data, error: api.error }
   }
 }

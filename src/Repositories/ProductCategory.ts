@@ -14,8 +14,8 @@ export interface ListParams {
 }
 
 export interface IProductCategoryRepo {
-  add: (form: IProductCategory) => Promise<{ data: IProductCategory[], error: RepoError }>
-  list: (params: ListParams) => Promise<{ data: IProductCategory[], error: RepoError }>
+  add: (form: IProductCategory) => Promise<{ data: IProductCategory[] | null, error: RepoError | null }>
+  list: (params: ListParams) => Promise<{ data: IProductCategory[] | null, error: RepoError | null }>
   // update: () => Promise<{ data: any, error: any }>
-  // delete: (e: string) => Promise<{ data: any, error: any }>
+  delete: (e: string) => Promise<{ data: IProductCategory[] | null, error: RepoError | null }>
 }
